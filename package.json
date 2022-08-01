@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/delphiine/notes-app/issues"
   },
-  "homepage": "https://github.com/delphiine/notes-app#readme"
+  "homepage": "https://github.com/delphiine/notes-app#readme",
+  "dependencies": {
+    "jest": "^28.1.3"
+  }
 }
