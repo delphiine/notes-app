@@ -4,11 +4,14 @@
 
 const fs = require('fs');
 const NotesModel = require('../lib/notesModel');
-const NotesView = require('../lib/notesView'); 
+const NotesView = require('../lib/notesView');
  
 describe('Notes view', () => {
+  beforeEach(() => {
+    document.body.innerHTML = fs.readFileSync('../index.html');
+  });
+
   it('displays two notes', () => {
-    document.body.innerHTML = fs.readFileSync('./index.html');
     const model = new NotesModel();
     const view = new NotesView(model);
 
@@ -23,7 +26,6 @@ describe('Notes view', () => {
   });
 
   it('displays added notes without duplicates', () => {
-    document.body.innerHTML = fs.readFileSync('./index.html');
     const model = new NotesModel();
     const view = new NotesView(model);
 
@@ -47,7 +49,6 @@ describe('Notes view', () => {
   });
 
   it('adds a new note and displays it on page', () => {
-    document.body.innerHTML = fs.readFileSync('./index.html')
     const model = new NotesModel();
     const view = new NotesView(model);
 
