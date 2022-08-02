@@ -3,8 +3,8 @@
  */
 
 const fs = require('fs');
-const NotesModel = require('./notesModel');
-const NotesView = require('./notesView'); 
+const NotesModel = require('../lib/notesModel');
+const NotesView = require('../lib/notesView'); 
  
 describe('Notes view', () => {
   it('displays two notes', () => {
