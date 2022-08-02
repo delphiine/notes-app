@@ -20,6 +20,7 @@
   "homepage": "https://github.com/delphiine/notes-app#readme",
   "dependencies": {
     "jest": "^28.1.3",
-    "jest-environment-jsdom": "^28.1.3"
+    "jest-environment-jsdom": "^28.1.3",
+    "jest-fetch-mock": "^3.0.3"
   }
 }
