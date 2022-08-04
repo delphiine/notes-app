@@ -2,13 +2,16 @@
  * @jest-environment jsdom
  */
 
+ require('jest-fetch-mock').enableMocks();
+
 const fs = require('fs');
-const NotesModel = require('../lib/notesModel');
-const NotesView = require('../lib/notesView');
- 
+const NotesModel = require('../notesModel');
+const NotesView = require('../notesView');
+const Api = require('../notesApi');
+
 describe('Notes view', () => {
   beforeEach(() => {
-    document.body.innerHTML = fs.readFileSync('../index.html');
+    document.body.innerHTML = fs.readFileSync('./index.html');
   });
 
   it('displays two notes', () => {
@@ -20,8 +23,8 @@ describe('Notes view', () => {
     model.addNote(firstNote);
     model.addNote(secondNote);
     view.displayNotes();
-    expect(document.querySelectorAll('div.note')[0].innerText).toContain(firstNote);
-    expect(document.querySelectorAll('div.note')[1].innerText).toContain(secondNote);
+    expect(document.querySelectorAll('div.note')[0].innerText).toEqual(firstNote);
+    expect(document.querySelectorAll('div.note')[1].innerText).toEqual(secondNote);
     expect(document.querySelectorAll('div.note').length).toEqual(2);
   });
 
@@ -34,17 +37,17 @@ describe('Notes view', () => {
     model.addNote(firstNote);
     model.addNote(secondNote);
     view.displayNotes();
-    expect(document.querySelectorAll('div.note')[0].innerText).toContain(firstNote);
-    expect(document.querySelectorAll('div.note')[1].innerText).toContain(secondNote);
+    expect(document.querySelectorAll('div.note')[0].innerText).toEqual(firstNote);
+    expect(document.querySelectorAll('div.note')[1].innerText).toEqual(secondNote);
     expect(document.querySelectorAll('div.note').length).toEqual(2);
 
     // adding a new Note and displaying again
     const thirdNote = 'this is the funniest note'
     model.addNote(thirdNote);
     view.displayNotes();
-    expect(document.querySelectorAll('div.note')[0].innerText).toContain(firstNote);
-    expect(document.querySelectorAll('div.note')[1].innerText).toContain(secondNote);
-    expect(document.querySelectorAll('div.note')[2].innerText).toContain(thirdNote);
+    expect(document.querySelectorAll('div.note')[0].innerText).toEqual(firstNote);
+    expect(document.querySelectorAll('div.note')[1].innerText).toEqual(secondNote);
+    expect(document.querySelectorAll('div.note')[2].innerText).toEqual(thirdNote);
     expect(document.querySelectorAll('div.note').length).toEqual(3);
   });
 
@@ -53,12 +56,27 @@ describe('Notes view', () => {
     const view = new NotesView(model);
 
     const input = document.querySelector('#add-note-input');
-    const button = document.querySelector('#add-note-button')
+    const button = document.querySelector('#add-note-button');
 
-    const noteValue = 'Buy milk'
+    const noteValue = 'Buy milk';
     input.value = noteValue;
     button.click();
     expect(document.querySelectorAll('div.note')[0].innerText).toEqual(noteValue);
     expect(document.querySelector('#add-note-input').value).toEqual('');
+  });
+
+  it('Test DisplayNotesFromApi()', () => {
+    const model = new NotesModel();
+    const api = new Api();
+    const view = new NotesView(model, api);
+    const note1 = "Test";
+    const note2 = "Another test";
+    fetch.mockResponseOnce(JSON.stringify([note1, note2]));
+
+    view.displayNotesFromApi(() => {
+      expect(document.querySelectorAll('div.note')[0].innerText).toEqual(note1);
+      expect(document.querySelectorAll('div.note')[1].innerText).toEqual(note2);
+      expect(document.querySelectorAll('div.note').length).toEqual(2);
+    });
   });
 });

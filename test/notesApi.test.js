@@ -1,4 +1,4 @@
-const Api = require('../lib/notesApi');
+const Api = require('../notesApi');
 
 require('jest-fetch-mock').enableFetchMocks()
 
