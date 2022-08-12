@@ -8,6 +8,7 @@ const fs = require('fs');
 const NotesModel = require('../notesModel');
 const NotesView = require('../notesView');
 const Api = require('../notesApi');
+const NotesApi = require('../notesApi');
 
 describe('Notes view', () => {
   beforeEach(() => {
@@ -53,7 +54,8 @@ describe('Notes view', () => {
 
   it('adds a new note and displays it on page', () => {
     const model = new NotesModel();
-    const view = new NotesView(model);
+    const api = new NotesApi();
+    const view = new NotesView(model, api);
 
     const input = document.querySelector('#add-note-input');
     const button = document.querySelector('#add-note-button');
@@ -78,5 +80,16 @@ describe('Notes view', () => {
       expect(document.querySelectorAll('div.note')[1].innerText).toEqual(note2);
       expect(document.querySelectorAll('div.note').length).toEqual(2);
     });
+  });
+
+  it('creates a new note on the server', () => {
+    const model = new NotesModel();
+    const api = new Api();
+    const view = new NotesView(model, api);
+    fetch.mockResponseOnce(JSON.stringify(["notes1"]));
+
+    view.addNewNote()
+    expect(document.querySelectorAll('div.note')[0].textContent).toEqual("notes1");
+    expect(document.querySelectorAll('div.note').length).toEqual(1);
   });
 });

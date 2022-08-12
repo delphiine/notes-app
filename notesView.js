@@ -25,19 +25,26 @@ class NotesView {
     })
   }
 
-  displayNotesFromApi(callback) {
+  displayNotesFromApi(callbackTest) {
     this.api.loadNotes((data) => {
+      this.model.reset();
       data.forEach(note => {this.model.addNote(note)});
       this.displayNotes();
-      if (callback) {
-        callback()
+      if (callbackTest) {
+        callbackTest()
       }
-    })
+    });
   }
-
-  addNewNote(note) {
-    this.model.addNote(note);
-    this.displayNotes();
+  
+  addNewNote(note, callbackTest) {
+    this.api.createNote(note, (data) => {
+      this.model.reset();
+      data.forEach(note => {this.model.addNote(note)});
+      this.displayNotes();
+      if (callbackTest) {
+        callbackTest()
+      }
+    });
   }
 }
 
